@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!-- header -->
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#000080">
+        <TextView
+            android:id="@+id/tv_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/tv_station"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_toRightOf="@id/tv_line" />
+
+        <TextView
+            android:id="@+id/tv_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <!-- trains -->
+    <LinearLayout
+        android:id="@+id/ll_trains"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/rl_header"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_train1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+            <TextView
+                android:id="@+id/tv_trainType1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true" />
+            <TextView
+                android:id="@+id/tv_destination1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_trainType1" />
+            <ImageView
+                android:id="@+id/iv_train1"
+                android:src="@drawable/train"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_destination1"
+                android:scaleType="center"
+                android:contentDescription="TRAIN"/>
+            <TextView
+                android:id="@+id/tv_time1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_train1" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_train2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+            <TextView
+                android:id="@+id/tv_trainType2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true" />
+            <TextView
+                android:id="@+id/tv_destination2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_trainType2" />
+            <ImageView
+                android:id="@+id/iv_train2"
+                android:src="@drawable/train"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_destination2"
+                android:scaleType="center"
+                android:contentDescription="TRAIN"/>
+            <TextView
+                android:id="@+id/tv_time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_train2" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_train3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+            <TextView
+                android:id="@+id/tv_trainType3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true" />
+            <TextView
+                android:id="@+id/tv_destination3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_trainType3" />
+            <ImageView
+                android:id="@+id/iv_train3"
+                android:src="@drawable/train"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_destination3"
+                android:scaleType="center"
+                android:contentDescription="TRAIN"/>
+            <TextView
+                android:id="@+id/tv_time3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_train3" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
+

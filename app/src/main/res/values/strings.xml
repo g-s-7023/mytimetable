@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">mytimetable</string>
+    <string name="action_rename_tabs">画面名の変更</string>
+    <string name="action_addstation">駅の追加</string>
+    <string name="got_time">取得した時刻</string>
+    <string name="select_operator">事業者を選択してください</string>
+    <string name="select_line">路線を選択してください</string>
+    <string name="select_station">駅を選択してください</string>
+    <string name="select_direction">方面を選択してください</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="ok">OK</string>
+    <string name="title_delete">この行を削除しますか</string>
+    <string name="title_edittab">画面名の変更</string>
+    <string name="title_activity_add_station">AddStationActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
+
