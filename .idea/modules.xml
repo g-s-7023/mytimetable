@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\nao\Documents\programs\android_projects\mytimetable\app\app.iml" filepath="C:\Users\nao\Documents\programs\android_projects\mytimetable\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mytimetable.iml" filepath="$PROJECT_DIR$/mytimetable.iml" />
+      <module fileurl="file://C:\Users\nao\Documents\programs\android_projects\mytimetable\mytimetable.iml" filepath="C:\Users\nao\Documents\programs\android_projects\mytimetable\mytimetable.iml" />
     </modules>
   </component>
 </project>
