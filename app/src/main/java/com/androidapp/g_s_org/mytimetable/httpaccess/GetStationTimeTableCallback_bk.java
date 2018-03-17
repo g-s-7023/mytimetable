@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DEPARTURETIME;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DESTINATIONSTATION;
@@ -23,17 +22,16 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_STATIONTIMETA
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TRAINTYPE;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TRAINTYPETITLE;
 
-public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
-    private static GetStationTimeTableCallback mCallback = new GetStationTimeTableCallback();
+public class GetStationTimeTableCallback_bk implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
+    private static GetStationTimeTableCallback_bk mCallback = new GetStationTimeTableCallback_bk();
     private StationRecyclerViewAdapter mAdapter;
     private Calendar mGotDate;
-    private Map<Integer, List<TrainItem>> mTrains;
 
 
-    private GetStationTimeTableCallback() {
+    private GetStationTimeTableCallback_bk() {
     }
 
-    public static GetStationTimeTableCallback getCallback() {
+    public static GetStationTimeTableCallback_bk getCallback() {
         return mCallback;
     }
 
@@ -47,12 +45,6 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
 
     @Override
     public void callback(JSONArray result, int position) {
-
-
-        // 追加取得に対応できるように作り直し
-
-
-
         // display information of for trains nearest to this station
         List<TrainItem> trains = new ArrayList<>();
         HashMap<String, TrainItem> trainMap = new HashMap<>();

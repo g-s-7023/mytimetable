@@ -109,10 +109,15 @@ public class StationItem {
         }
     }
 
+    public void setTrains(List<TrainItem> trains) {
+        mTrains = trains;
+    }
+
     public void setStationsOfLine(List<QueryItem> list){
         mStationsOfLine = list;
     }
 
+    // get first three trains and add them to mTrains
     public void resetTrains(List<TrainItem> trains) {
         if (mTrains == null) {
             mTrains = new ArrayList<>();

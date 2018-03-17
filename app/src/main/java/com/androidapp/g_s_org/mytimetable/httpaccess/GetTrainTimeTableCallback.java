@@ -21,6 +21,7 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DEPARTURESTAT
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DEPARTURETIME;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TIMETABLE;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TRAINNUMBER;
+import static com.androidapp.g_s_org.mytimetable.common.Common.TRAINSNUM_DISPLAY;
 
 public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
     private static GetTrainTimeTableCallback mCallback = new GetTrainTimeTableCallback();
@@ -162,6 +163,25 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
                 return 0;
             }
         });
+        // get first three trains and add them to mTrains
+        int numOfTrains = trainsForSort.size();
+        if (numOfTrains >= TRAINSNUM_DISPLAY){
+            List<TrainItem> trainsToSet = new ArrayList<>();
+            for (int i = 0; i < TRAINSNUM_DISPLAY; i++) {
+                trainsToSet.add(trainsForSort.get(i));
+            }
+            stationItem.setTrains(trainsToSet);
+            mAdapter.notifyItemChanged(position);
+        } else {
+            // if num of trainsForSort is short of trainsNum to display
+            // get addtional trains from stationTimeTable
+
+
+
+            // 追加でgetするプログラム
+
+
+        }
         stationItem.resetTrains(trainsForSort);
         mAdapter.notifyItemChanged(position);
     }
