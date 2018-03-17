@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.container;
 
         import android.content.ContentValues;
 
@@ -7,8 +7,8 @@ package com.androidapp.g_s_org.mytimetable;
         import java.util.HashMap;
         import java.util.List;
 
-        import static com.androidapp.g_s_org.mytimetable.Common.direction_circular;
-        import static com.androidapp.g_s_org.mytimetable.Common.direction_linear;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.direction_circular;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.direction_linear;
 
 /**
  * Created by C170044 on 2018/03/01.

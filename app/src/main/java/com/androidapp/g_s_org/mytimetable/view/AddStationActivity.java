@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.view;
 
         import android.content.ContentValues;
         import android.content.Context;
@@ -13,6 +13,14 @@ package com.androidapp.g_s_org.mytimetable;
         import android.view.View;
         import android.widget.Button;
 
+        import com.androidapp.g_s_org.mytimetable.common.Common;
+        import com.androidapp.g_s_org.mytimetable.httpaccess.HttpGetTrafficAPI;
+        import com.androidapp.g_s_org.mytimetable.container.QueryItem;
+        import com.androidapp.g_s_org.mytimetable.R;
+        import com.androidapp.g_s_org.mytimetable.container.TempStationItemForRegister;
+        import com.androidapp.g_s_org.mytimetable.adapter.AddStationRecyclerViewAdapter;
+        import com.androidapp.g_s_org.mytimetable.dbaccess.StationAccessHelper;
+
         import org.json.JSONArray;
         import org.json.JSONObject;
 
@@ -20,27 +28,27 @@ package com.androidapp.g_s_org.mytimetable;
         import java.util.Arrays;
         import java.util.List;
 
-        import static com.androidapp.g_s_org.mytimetable.Common.ACCESSTOKEN;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_DIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_OPERATOR;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_RAILWAY;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_SAMEAS;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_STATION;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_STATIONORDER;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_STATIONTITLE;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_TITLE;
-        import static com.androidapp.g_s_org.mytimetable.Common.KEY_TOKEN;
-        import static com.androidapp.g_s_org.mytimetable.Common.PATH_API;
-        import static com.androidapp.g_s_org.mytimetable.Common.QUERY_RAILWAY;
-        import static com.androidapp.g_s_org.mytimetable.Common.QUERY_STATION;
-        import static com.androidapp.g_s_org.mytimetable.Common.QUERY_STATIONTIMETABLE;
-        import static com.androidapp.g_s_org.mytimetable.Common.REALTIME;
-        import static com.androidapp.g_s_org.mytimetable.Common.SELECT_DIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.Common.SELECT_LINE;
-        import static com.androidapp.g_s_org.mytimetable.Common.SELECT_OPERATOR;
-        import static com.androidapp.g_s_org.mytimetable.Common.SELECT_STATION;
-        import static com.androidapp.g_s_org.mytimetable.Common.STATIC;
-        import static com.androidapp.g_s_org.mytimetable.Common.YAMANOTE_LINE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.ACCESSTOKEN;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DIRECTION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_OPERATOR;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_RAILWAY;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_SAMEAS;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_STATION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_STATIONORDER;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_STATIONTITLE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TITLE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TOKEN;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.PATH_API;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.QUERY_RAILWAY;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.QUERY_STATION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.QUERY_STATIONTIMETABLE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.REALTIME;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SELECT_DIRECTION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SELECT_LINE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SELECT_OPERATOR;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SELECT_STATION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.STATIC;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.YAMANOTE_LINE;
 
 public class AddStationActivity extends AppCompatActivity {
     private static final String ARG_SECTION_NUMBER = "section_number";

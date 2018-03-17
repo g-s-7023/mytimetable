@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,8 +12,11 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.util.SparseIntArray;
 
-import static com.androidapp.g_s_org.mytimetable.Common.ARG_POSITION;
-import static com.androidapp.g_s_org.mytimetable.Common.ARG_SECTION_NUMBER;
+import com.androidapp.g_s_org.mytimetable.R;
+import com.androidapp.g_s_org.mytimetable.dbaccess.StationAccessHelper;
+
+import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_POSITION;
+import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_SECTION_NUMBER;
 
 
 // dialog asking if delete a station row or not

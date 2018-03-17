@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.adapter;
 
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ package com.androidapp.g_s_org.mytimetable;
         import android.view.ViewGroup;
         import android.widget.TextView;
 
+
+        import com.androidapp.g_s_org.mytimetable.container.QueryItem;
+        import com.androidapp.g_s_org.mytimetable.R;
 
         import java.util.List;
 

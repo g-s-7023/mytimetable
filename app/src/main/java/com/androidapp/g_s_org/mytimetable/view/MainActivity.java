@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.view;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,9 +25,13 @@ import android.content.res.Resources.Theme;
 
 import android.widget.TextView;
 
+import com.androidapp.g_s_org.mytimetable.R;
+import com.androidapp.g_s_org.mytimetable.container.StationItem;
+import com.androidapp.g_s_org.mytimetable.dbaccess.TitleAccessHelper;
+
 import java.util.ArrayList;
 
-import static com.androidapp.g_s_org.mytimetable.Common.ARG_ORIGINAL_NAME;
+import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_ORIGINAL_NAME;
 
 public class MainActivity extends AppCompatActivity implements
         StationsFragment.StationRefreshCallback,

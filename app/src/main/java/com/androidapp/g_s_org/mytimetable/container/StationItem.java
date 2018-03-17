@@ -1,10 +1,12 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.container;
+
+        import com.androidapp.g_s_org.mytimetable.common.TimeUtil;
 
         import java.util.ArrayList;
         import java.util.Calendar;
         import java.util.List;
 
-        import static com.androidapp.g_s_org.mytimetable.Common.*;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.*;
 
 /**
  * Created by C170044 on 2018/01/31.

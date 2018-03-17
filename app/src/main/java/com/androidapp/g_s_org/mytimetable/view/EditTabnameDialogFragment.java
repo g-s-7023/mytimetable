@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.view;
 
         import android.app.Activity;
         import android.app.AlertDialog;
@@ -11,8 +11,11 @@ package com.androidapp.g_s_org.mytimetable;
         import android.util.Log;
         import android.widget.EditText;
 
-        import static com.androidapp.g_s_org.mytimetable.Common.ARG_ORIGINAL_NAME;
-        import static com.androidapp.g_s_org.mytimetable.Common.ARG_SECTION_NUMBER;
+        import com.androidapp.g_s_org.mytimetable.R;
+        import com.androidapp.g_s_org.mytimetable.dbaccess.TitleAccessHelper;
+
+        import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_ORIGINAL_NAME;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_SECTION_NUMBER;
 
 
 // dialog to edit the name of tab

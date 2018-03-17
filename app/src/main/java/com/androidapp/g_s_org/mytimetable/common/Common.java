@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.common;
 
 
 // done
@@ -19,8 +19,8 @@ package com.androidapp.g_s_org.mytimetable;
 
 // todo
 // 在線情報を出している事業者がJRとメトロだけなので、駅時刻表から渡すのも必要
-// 列車の情報もあやしい
-// パッケージの整理
+// stringリソースをまとめて、commonを整理
+// 列車の種別も整理する
 
 
 // レイアウトの修正
@@ -28,6 +28,8 @@ package com.androidapp.g_s_org.mytimetable;
 // getでとれなかった場合に再送するメソッドの作成
 // 駅の並べ替えをするメソッドの作成
 
+
+        import com.androidapp.g_s_org.mytimetable.container.QueryItem;
 
         import java.util.Calendar;
         import java.util.HashMap;

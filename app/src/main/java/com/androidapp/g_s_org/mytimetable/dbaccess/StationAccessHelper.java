@@ -1,9 +1,11 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.dbaccess;
 
         import android.content.Context;
         import android.database.sqlite.SQLiteDatabase;
         import android.database.sqlite.SQLiteOpenHelper;
         import android.util.Log;
+
+        import com.androidapp.g_s_org.mytimetable.common.Common;
 
 /**
  * Created by nao on 2018/03/04.

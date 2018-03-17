@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.androidapp.g_s_org.mytimetable.MainActivity"
+            android:name="com.androidapp.g_s_org.mytimetable.view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.androidapp.g_s_org.mytimetable.AddStationActivity"
+            android:name="com.androidapp.g_s_org.mytimetable.view.AddStationActivity"
             android:label="@string/title_activity_add_station"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

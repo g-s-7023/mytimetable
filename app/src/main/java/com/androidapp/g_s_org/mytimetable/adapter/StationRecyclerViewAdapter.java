@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.adapter;
 
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
@@ -7,12 +7,16 @@ package com.androidapp.g_s_org.mytimetable;
         import android.widget.TextView;
 
 
+        import com.androidapp.g_s_org.mytimetable.R;
+        import com.androidapp.g_s_org.mytimetable.container.StationItem;
+        import com.androidapp.g_s_org.mytimetable.container.TrainItem;
+
         import java.util.ArrayList;
 
-        import static com.androidapp.g_s_org.mytimetable.Common.SUFFIX_DIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.Common.SUFFIX_LINE;
-        import static com.androidapp.g_s_org.mytimetable.Common.SUFFIX_ROTATEDIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.Common.SUFFIX_SEN;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_DIRECTION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_LINE;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_ROTATEDIRECTION;
+        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_SEN;
 
 
 public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecyclerViewAdapter.ViewHolder> {

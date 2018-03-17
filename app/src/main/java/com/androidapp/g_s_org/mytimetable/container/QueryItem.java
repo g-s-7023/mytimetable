@@ -1,4 +1,4 @@
-package com.androidapp.g_s_org.mytimetable;
+package com.androidapp.g_s_org.mytimetable.container;
 
 //===
 //=== pair of values (name and the corresponding value used to send query)
