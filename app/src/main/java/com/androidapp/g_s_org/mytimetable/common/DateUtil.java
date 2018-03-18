@@ -3,21 +3,21 @@ package com.androidapp.g_s_org.mytimetable.common;
         import java.util.Calendar;
 
 // judge weekday or holiday or sunday
-public class TimeUtil {
-    private TimeUtil(){}
+public class DateUtil {
+    private DateUtil(){}
 
     // check whether the given day is weekday, Saturday, or holiday
-    public static String getTypeOfDay(Calendar cal, String operator, String line) {
+    public static String getTypeOfDay(Calendar cal, Common.Operator operator) {
         if (cal.get(Calendar.HOUR_OF_DAY) < 2){
-            // 0:00-2:00 AM treated as the previous day
+            // 0:00-2:00 AM is treated as the previous day
             cal.add(Calendar.DAY_OF_YEAR, -1);
         }
         // check type of day
         String typeOfDay = Common.VAL_WEEKDAY;
         if (isHoliday(cal)){
             // holiday
-            switch (operator) {
-                case Common.KEIO:
+            switch (operator.getSaturdayAndHoliday()) {
+                case Common.NODISTINGUISH_SATURDAY:
                     typeOfDay = Common.VAL_SATHOLIDAY;
                     break;
                 default:
@@ -25,9 +25,9 @@ public class TimeUtil {
                     break;
             }
         } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            // sunday (treated as holiday)
-            switch (operator) {
-                case Common.KEIO:
+            // sunday (usually treated as holiday)
+            switch (operator.getSaturdayAndHoliday()) {
+                case Common.NODISTINGUISH_SATURDAY:
                     typeOfDay = Common.VAL_SATHOLIDAY;
                     break;
                 default:
@@ -36,8 +36,8 @@ public class TimeUtil {
             }
         } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
             // Saturday
-            switch (operator) {
-                case Common.KEIO:
+            switch (operator.getSaturdayAndHoliday()) {
+                case Common.NODISTINGUISH_SATURDAY:
                     typeOfDay = Common.VAL_SATHOLIDAY;
                     break;
                 default:

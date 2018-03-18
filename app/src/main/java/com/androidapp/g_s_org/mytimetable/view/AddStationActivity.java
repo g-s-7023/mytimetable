@@ -14,6 +14,7 @@ package com.androidapp.g_s_org.mytimetable.view;
         import android.widget.Button;
 
         import com.androidapp.g_s_org.mytimetable.common.Common;
+        import com.androidapp.g_s_org.mytimetable.dbaccess.StationsOfLineAccessHelper;
         import com.androidapp.g_s_org.mytimetable.httpaccess.HttpGetTrafficAPI;
         import com.androidapp.g_s_org.mytimetable.container.QueryItem;
         import com.androidapp.g_s_org.mytimetable.R;
@@ -282,30 +283,33 @@ public class AddStationActivity extends AppCompatActivity {
     }
 
     public void storeStation(QueryItem item){
-        // update direction of station to register
         mStation.setDirection(item);
-
+        //===
+        //=== register the information of the station to DB
+        //===
+        // create AccessHelper
+        StationAccessHelper saHelper = new StationAccessHelper(AddStationActivity.this);
+        StationsOfLineAccessHelper solaHelper = new StationsOfLineAccessHelper(AddStationActivity.this);
         // SQLiteDatabase
         SQLiteDatabase db = null;
-
-
-        /*
-        // register the information of the line to DB
-        StationsOfLineAccessHelper solaHelper = new StationsOfLineAccessHelper(AddStationActivity.this);
         // ContentValues object for storing values to insert
-        ContentValues cv = mStation.
-        // todo
-        // 既にlineが登録されているなら、書き込まない(丸の内線以外)
-
-
-        // register stations of line to DB
+        ContentValues cvStation = mStation.getContentsValuesOfStation(mSectionNumber, mRowNumber);
+        // register to DB
         try {
             // get DB object
-            db = solaHelper.getWritableDatabase();
+            db = saHelper.getWritableDatabase();
             // begin transaction
             db.beginTransaction();
             // execute SQL
-            db.insert(StationsOfLineAccessHelper.TABLE_NAME, null, cv);
+            long insertedId = db.insert(StationAccessHelper.TABLE_NAME, null, cvStation);
+            // get id of the inserted entry and put it to the line table
+            ContentValues cvLine = mStation.getContentsValuesOfLine((int)insertedId);
+
+
+            // dbを使いまわすか、もう一つ用意してinsert実行
+
+
+            db.insert(StationsOfLineAccessHelper.TABLE_NAME, null, cvLine);
             // commit
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -316,33 +320,6 @@ public class AddStationActivity extends AppCompatActivity {
             db.endTransaction();
             // close DB
             db.close();
-        }
-        */
-        // register the information of the station to DB
-        // create AccessHelper
-        StationAccessHelper saHelper = new StationAccessHelper(AddStationActivity.this);
-        // SQLiteDatabase
-        SQLiteDatabase db2 = null;
-        // ContentValues object for storing values to insert
-        ContentValues cv = mStation.getContentsValues(mSectionNumber, mRowNumber);
-        // register to DB
-        try {
-            // get DB object
-            db2 = saHelper.getWritableDatabase();
-            // begin transaction
-            db2.beginTransaction();
-            // execute SQL
-            db2.insert(StationAccessHelper.TABLE_NAME, null, cv);
-            // commit
-            db2.setTransactionSuccessful();
-        } catch (Exception e) {
-            // output log
-            Log.e("ERROR", e.toString());
-        } finally {
-            // end transaction
-            db2.endTransaction();
-            // close DB
-            db2.close();
             // create intent
             Intent intent = new Intent(AddStationActivity.this, MainActivity.class);
             // put tabId to show after moving activity

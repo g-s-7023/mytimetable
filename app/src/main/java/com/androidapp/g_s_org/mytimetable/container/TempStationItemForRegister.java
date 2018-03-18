@@ -2,6 +2,8 @@ package com.androidapp.g_s_org.mytimetable.container;
 
         import android.content.ContentValues;
 
+        import com.androidapp.g_s_org.mytimetable.common.Common;
+
         import java.util.ArrayList;
         import java.util.Arrays;
         import java.util.HashMap;
@@ -120,11 +122,19 @@ public class TempStationItemForRegister {
     }
 
     // return contents used for registering to DB
-    public ContentValues getContentsValues(int sectionNumber, int rowNumber){
+    public ContentValues getContentsValuesOfStation(int sectionNumber, int rowNumber){
+        // get operator's name
+        String operatorName = "";
+        for (Common.Operator op : Common.Operator.values()) {
+            if (op.getNameForQuery().equals(mOperator.getValueForQuery())) {
+                operatorName = op.name();
+                break;
+            }
+        }
         ContentValues cv = new ContentValues();
         cv.put("tabId", sectionNumber);
         cv.put("rowId", rowNumber);
-        cv.put("operator", mOperator.getValueForQuery());
+        cv.put("operator", operatorName);
         cv.put("line", mLine.getName());
         cv.put("lineForQuery", mLine.getValueForQuery());
         cv.put("stationName", mStationName.getName());
@@ -135,10 +145,10 @@ public class TempStationItemForRegister {
     }
 
     // return contents used for registering to DB
-    public ContentValues getCvForLine(){
+    public ContentValues getContentsValuesOfLine(int stationId){
         ContentValues cv = new ContentValues();
         for (QueryItem q : mStationHistory){
-            cv.put("line", mLine.getValueForQuery());
+            cv.put("stationId", stationId);
             cv.put("stationName", q.getName());
             cv.put("stationNameForQuery", q.getValueForQuery());
         }

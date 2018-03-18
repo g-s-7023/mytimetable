@@ -27,15 +27,16 @@ public class StationsOfLineAccessHelper extends SQLiteOpenHelper {
     }
 
     // executed when DB is created
+    // stationId is the id of Station table
     @Override
     public void onCreate(SQLiteDatabase db)
     {
         // SQL for creating DB
         String sql = "create table " + TABLE_NAME + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "line TEXT not null," +
+                "stationId INTEGER not null," +
                 "stationName TEXT not null," +
-                "stationNameForQuery TEXT not null";
+                "stationNameForQuery TEXT not null)";
         // execute SQL
         db.execSQL(sql);
     }

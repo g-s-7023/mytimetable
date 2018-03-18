@@ -72,28 +72,6 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
         } else {
             holder.lineView.setText(lineName + SUFFIX_SEN);
         }
-
-        /*
-        if (lineName.length() > 1){
-            if (lineName.substring(lineName.length() - 1, lineName.length()).equals(SUFFIX_SEN) == false){
-                if (lineName.length() >= 3) {
-                    if (lineName.substring(lineName.length() - 3, lineName.length()).equals(SUFFIX_LINE) == false) {
-                        holder.lineView.setText(lineName + SUFFIX_SEN);
-                    } else {
-                        // end with "ライン"
-                        holder.lineView.setText(lineName);
-                    }
-                } else {
-                    holder.lineView.setText(lineName + SUFFIX_SEN);
-                }
-            } else {
-                // end with "線"
-                holder.lineView.setText(lineName);
-            }
-        } else {
-            holder.lineView.setText(lineName + SUFFIX_SEN);
-        }
-        */
         // set station name
         holder.stationView.setText(" " + station.getStationName());
         // name of the direction
@@ -114,33 +92,45 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
         } else {
             holder.directionView.setText(directionName + SUFFIX_DIRECTION);
         }
+        // 1st train
         TrainItem train = station.getTrainItem(0);
         String trainType = "";
         String trainDestination = "";
         if (train != null) {
             trainType = train.getTrainTypeName();
             holder.trainType1View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
-            trainDestination = train.getDestinationName();
+            trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
+            if (trainDestination.equals("")){
+                trainDestination = train.getDestination().getName();
+            }
             holder.destination1View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
 //            holder.trainType1View.setText(train.getTrainTypeName());
 //            holder.destination1View.setText(train.getDestinationName());
             holder.time1View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
         }
+        // 2nd train
         train = station.getTrainItem(1);
         if (train != null) {
             trainType = train.getTrainTypeName();
             holder.trainType2View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
-            trainDestination = train.getDestinationName();
+            trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
+            if (trainDestination.equals("")){
+                trainDestination = train.getDestination().getName();
+            }
             holder.destination2View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
 //            holder.trainType2View.setText(train.getTrainTypeName());
 //            holder.destination2View.setText(train.getDestinationName());
             holder.time2View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
         }
+        // 3rd train
         train = station.getTrainItem(2);
         if (train != null) {
             trainType = train.getTrainTypeName();
             holder.trainType3View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
-            trainDestination = train.getDestinationName();
+            trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
+            if (trainDestination.equals("")){
+                trainDestination = train.getDestination().getName();
+            }
             holder.destination3View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
 //            holder.trainType3View.setText(train.getTrainTypeName());
 //            holder.destination3View.setText(train.getDestinationName());

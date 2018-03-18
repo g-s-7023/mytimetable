@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.androidapp.g_s_org.mytimetable.adapter.StationRecyclerViewAdapter;
-import com.androidapp.g_s_org.mytimetable.common.TimeUtil;
+import com.androidapp.g_s_org.mytimetable.common.DateUtil;
 import com.androidapp.g_s_org.mytimetable.container.StationItem;
 import com.androidapp.g_s_org.mytimetable.container.TrainItem;
 import com.androidapp.g_s_org.mytimetable.view.StationsFragment;
@@ -111,7 +111,7 @@ public class GetTrainsPositionCallback implements HttpGetTrafficAPI.HttpGetTraff
                     .append(QUERY_TRAINTIMETABLE)
                     .append(KEY_RAILWAY).append("=").append(stationItem.getLineForQuery())
                     .append("&")
-                    .append(KEY_CALENDAR).append("=").append(TimeUtil.getTypeOfDay(Calendar.getInstance(), stationItem.getOperator(), stationItem.getLineForQuery()))
+                    .append(KEY_CALENDAR).append("=").append(DateUtil.getTypeOfDay(Calendar.getInstance(), stationItem.getOperator()))
                     .append("&")
                     .append(KEY_TRAINNUMBER).append("=");
             for (TrainItem train : trains) {

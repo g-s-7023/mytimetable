@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidapp.g_s_org.mytimetable.common.Common;
+import com.androidapp.g_s_org.mytimetable.container.QueryItem;
+import com.androidapp.g_s_org.mytimetable.dbaccess.StationsOfLineAccessHelper;
 import com.androidapp.g_s_org.mytimetable.httpaccess.HttpGetTrafficAPI;
 import com.androidapp.g_s_org.mytimetable.R;
 import com.androidapp.g_s_org.mytimetable.dbaccess.StationAccessHelper;
@@ -26,7 +28,9 @@ import com.androidapp.g_s_org.mytimetable.httpaccess.GetTrainsPositionCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_POSITION;
 import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_SECTION_NUMBER;
@@ -209,102 +213,85 @@ public class StationsFragment extends Fragment {
     //=== create stationItem from DB
     //===
     public ArrayList<StationItem> createStationItem(int sectionNumber) {
+        Activity caller = getActivity();
         // DB AccessHelperodpt:stationTitle
-        StationAccessHelper helper = new StationAccessHelper(getActivity());
+        StationAccessHelper stationHelper = new StationAccessHelper(caller);
         // DB
-        SQLiteDatabase db = null;
+        SQLiteDatabase stationDb = null;
         // Cursor
-        Cursor cursor = null;
+        Cursor stationCursor = null;
         // list of StationItem
         ArrayList<StationItem> list = new ArrayList<>();
         try {
             // get DB object
-            db = helper.getReadableDatabase();
+            stationDb = stationHelper.getReadableDatabase();
             // get data from DB
-            cursor = db.query(
+            stationCursor = stationDb.query(
                     StationAccessHelper.TABLE_NAME,
                     new String[]{"id", "tabId", "rowId", "operator", "line", "lineForQuery", "stationName", "stationNameForQuery", "direction", "directionForQuery"},
                     "tabId=?",
                     new String[]{Integer.toString(sectionNumber)},
                     null, null, "rowId ASC"
             );
-            // read data in sequence and store them to list
-            while (cursor.moveToNext()) {
-                // test
-                int rowId = cursor.getInt(cursor.getColumnIndex("rowId"));
+            //===
+            //=== read data in sequence from station table and store them to list
+            //===
+            while (stationCursor.moveToNext()) {
+                int stationId = stationCursor.getInt(stationCursor.getColumnIndex("id"));
                 // get type of time table
-                String operator = cursor.getString(cursor.getColumnIndex("operator"));
-                int typeOfTimeTable = NONE;
-                for (Common.Operator op : Common.Operator.values()) {
-                    if (op.getNameForQuery().equals(operator)) {
-                        typeOfTimeTable = op.getTypeOfTimetable();
-                        break;
-                    }
-                }
-                // create StationItem and add to list
+                String operatorName = stationCursor.getString(stationCursor.getColumnIndex("operator"));
+                Common.Operator operator = Common.Operator.valueOf(operatorName);
+                // create StationItem and add to list (only if its operator provide timetable)
+                int typeOfTimeTable = operator.getTypeOfTimetable();
                 if (typeOfTimeTable == REALTIME || typeOfTimeTable == STATIC) {
-                    list.add(new StationItem(
-                            cursor.getInt(cursor.getColumnIndex("rowId")),
+                    StationItem stationItem = new StationItem(
+                            stationCursor.getInt(stationCursor.getColumnIndex("rowId")),
                             operator,
-                            typeOfTimeTable,
-                            cursor.getString(cursor.getColumnIndex("line")),
-                            cursor.getString(cursor.getColumnIndex("stationName")),
-                            cursor.getString(cursor.getColumnIndex("direction")),
-                            cursor.getString(cursor.getColumnIndex("lineForQuery")),
-                            cursor.getString(cursor.getColumnIndex("stationNameForQuery")),
-                            cursor.getString(cursor.getColumnIndex("directionForQuery"))
-                    ));
+                            operator.getTypeOfTimetable(),
+                            stationCursor.getString(stationCursor.getColumnIndex("line")),
+                            stationCursor.getString(stationCursor.getColumnIndex("stationName")),
+                            stationCursor.getString(stationCursor.getColumnIndex("direction")),
+                            stationCursor.getString(stationCursor.getColumnIndex("lineForQuery")),
+                            stationCursor.getString(stationCursor.getColumnIndex("stationNameForQuery")),
+                            stationCursor.getString(stationCursor.getColumnIndex("directionForQuery"))
+                    );
+                    //===
+                    //=== read data from line table and store them to list
+                    //===
+                    // DB AccessHelperodpt:stationTitle
+                    StationsOfLineAccessHelper lineHelper = new StationsOfLineAccessHelper(caller);
+                    // DB
+                    SQLiteDatabase lineDb = null;
+                    // Cursor
+                    Cursor lineCursor = null;
+                    // get DB object
+                    lineDb = lineHelper.getReadableDatabase();
+                    // get data from DB
+                    lineCursor = lineDb.query(
+                            StationsOfLineAccessHelper.TABLE_NAME,
+                            new String[]{"id", "stationId", "stationName", "stationNameForQuery"},
+                            "stationId=?",
+                            new String[]{Integer.toString(stationId)},
+                            null, null, "id ASC"
+                    );
+                    Map<String, String> stationsOfLine = new HashMap<>();
+                    while (lineCursor.moveToNext()) {
+                        stationsOfLine.put(
+                                lineCursor.getString(lineCursor.getColumnIndex("stationNameForQuery")),
+                                lineCursor.getString(lineCursor.getColumnIndex("stationName"))
+                        );
+                    }
+                    stationItem.setStationsOfLine(stationsOfLine);
                 }
             }
         } catch (Exception e) {
             Log.e("ERROR", e.toString());
         } finally {
             // close cursor
-            if (cursor != null) {
-                cursor.close();
+            if (stationCursor != null) {
+                stationCursor.close();
             }
         }
-        /*
-        // DB AccessHelper
-        StationsOfLineAccessHelper solaHelper = new StationsOfLineAccessHelper(getActivity());
-        // DB
-        SQLiteDatabase db2 = null;
-        // Cursor
-        Cursor cursor2 = null;
-        try {
-            // get DB object
-            db2 = helper.getReadableDatabase();
-            for (StationItem si : list) {
-                // get data from DB
-                cursor2 = db2.query(
-                        StationAccessHelper.TABLE_NAME,
-                        new String[]{"id", "line", "stationName", "stationNameForQuery"},
-                        "line=?",
-                        new String[]{si.getLineForQuery()},
-                        null, null, null
-                );
-                // read data in sequence and store them to list
-                List<QueryItem> stations = new ArrayList<>();
-                while (cursor2.moveToNext()) {
-                    String sName = cursor2.getString(cursor2.getColumnIndex("stationName"));
-                    String sNameForQuery = cursor2.getString(cursor2.getColumnIndex("stationNameForQuery"));
-                    stations.add(new QueryItem(sName, sNameForQuery));
-                }
-                si.setStationsOfLine(stations);
-            }
-        } catch (Exception e) {
-            Log.e("ERROR", e.toString());
-        } finally {
-            // close cursor
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        // lineを読み込んで登録する
-        // 駅名を検索する
-        */
-
         return list;
     }
 

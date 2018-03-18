@@ -18,7 +18,9 @@ package com.androidapp.g_s_org.mytimetable.common;
 // なぜか駅が2つ消える
 
 // todo
+// 駅名の日本語化
 // 在線情報を出している事業者がJRとメトロだけなので、駅時刻表から渡すのも必要
+// operator周りの整理
 // stringリソースをまとめて、commonを整理
 // 列車の種別も整理する
 
@@ -92,31 +94,9 @@ public class Common {
     public static final String VAL_HOLIDAY = "odpt.Calendar:Holiday";
     public static final String VAL_SATHOLIDAY = "odpt.Calendar:SaturdayHoliday";
     //===
-    //=== parameter to select callback in HttpGet
-    //===
-    public static final int GET_TRAINS_POSITION = 1;
-    public static final int GET_TRAIN_INFO = 2;
-    public static final int GET_RAILWAY_INFO = 3;
-    public static final int GET_TRAIN_TIMETABLE = 4;
-    //===
-    //=== Transport operator
-    //===
-    public static final String OPERATOR_METRO = "TokyoMetro";
-    public static final String OPERATR_JREAST = "JR-East";
-    //===
-    //=== railway
-    //===
-    public static final String RAILWAY_CHUO = "Chuo";
-    //===
-    //=== direction
-    //===
-    public static final int DIRECTION_A = 1;
-    public static final int DIRECTION_B = 2;
-    //===
     //=== number of trains to display
     //===
     public static final int TRAINSNUM_DISPLAY = 3;
-    public static final int TRAINSNUM_SEARCH = TRAINSNUM_DISPLAY + 2;
     //===
     //=== type of timetable
     //===
@@ -144,15 +124,11 @@ public class Common {
     //===
     public static final String LOG_DBUPGRADE = "StationAccessHelper.onUpgrade is called";
     //===
-    //=== type of date
+    //=== distinguish saturday from holiday)
     //===
-    public static final int WEEKDAY = 1;
-    public static final int SATURDAY = 2;
-    public static final int HOLIDAY = 3;
-    //===
-    //=== number of tabs
-    //===
-    public static final int NUMOFTABS = 3;
+    public static final int NODISTINGUISH_SATURDAY = 1;
+    public static final int DISTINGUISH_SATURDAY = 2;
+    public static final int DISTINGUISH_OTHERWAYS = 3;
     //===
     //=== opertor name(temporary)
     //===
@@ -167,18 +143,18 @@ public class Common {
     //=== operator
     //===
     public enum Operator {
-        TokyoMetro("東京メトロ", "odpt.Operator:TokyoMetro", REALTIME),
-        JREast("JR東日本", "odpt.Operator:JR-East", REALTIME),
-        Keikyu("京急電鉄", "odpt.Operator:Keikyu", STATIC),
-        Keio("京王電鉄", "odpt.Operator:Keio", STATIC),
-        Keisei("京成電鉄", "odpt.Operator:Keisei", NONE),
-        Odakyu("小田急電鉄", "odpt.Operator:Odakyu", NONE),
-        Seibu("西武鉄道", "odpt.Operator:Seibu", NONE),
-        Tobu("東武鉄道", "odpt.Operator:Tobu", STATIC),
-        Toei("都営", "odpt.Operator:Toei", STATIC),
-        Tokyu("東急電鉄", "odpt.Operator:Tokyu", NONE),
-        Rinkai("東京臨海高速鉄道", "odpt.Operator:TWR", STATIC),
-        Yurikamome("ゆりかもめ", "odpt.Operator:Yurikamome", NONE);
+        TokyoMetro("東京メトロ", "odpt.Operator:TokyoMetro", REALTIME, DISTINGUISH_SATURDAY),
+        JREast("JR東日本", "odpt.Operator:JR-East", REALTIME, NODISTINGUISH_SATURDAY),
+        Keikyu("京急電鉄", "odpt.Operator:Keikyu", STATIC, DISTINGUISH_SATURDAY),
+        Keio("京王電鉄", "odpt.Operator:Keio", STATIC, NODISTINGUISH_SATURDAY),
+        Keisei("京成電鉄", "odpt.Operator:Keisei", NONE, DISTINGUISH_OTHERWAYS),
+        Odakyu("小田急電鉄", "odpt.Operator:Odakyu", NONE, DISTINGUISH_OTHERWAYS),
+        Seibu("西武鉄道", "odpt.Operator:Seibu", NONE, DISTINGUISH_OTHERWAYS),
+        Tobu("東武鉄道", "odpt.Operator:Tobu", STATIC, DISTINGUISH_SATURDAY),
+        Toei("都営", "odpt.Operator:Toei", STATIC, NODISTINGUISH_SATURDAY),
+        Tokyu("東急電鉄", "odpt.Operator:Tokyu", NONE, DISTINGUISH_OTHERWAYS),
+        Rinkai("東京臨海高速鉄道", "odpt.Operator:TWR", STATIC, DISTINGUISH_SATURDAY),
+        Yurikamome("ゆりかもめ", "odpt.Operator:Yurikamome", NONE, DISTINGUISH_OTHERWAYS);
 
         // name of operator
         private String mName;
@@ -186,13 +162,15 @@ public class Common {
         private String mNameForQuery;
         // how to get timetable
         private int mTypeOfTimetable;
+        // distinguish Saturday from Holiday
+        private int mSaturdayAndHoliday;
 
-        private Operator(String name, String nameForQuery, int typeOfTimetable) {
+        private Operator(String name, String nameForQuery, int typeOfTimetable, int saturdayAndHoliday) {
             mName = name;
             mNameForQuery = nameForQuery;
             mTypeOfTimetable = typeOfTimetable;
+            mSaturdayAndHoliday = saturdayAndHoliday;
         }
-
         public String getName() {
             return mName;
         }
@@ -202,6 +180,8 @@ public class Common {
         }
 
         public int getTypeOfTimetable(){ return mTypeOfTimetable; }
+
+        public int getSaturdayAndHoliday(){ return mSaturdayAndHoliday; }
     }
 
     //===
@@ -211,11 +191,6 @@ public class Common {
     //===
     //=== direction
     //===
-
-
-    //railDirectionなのかrailwayDirectionなのか
-
-
     // directions of JR line(cannot be got from stationTimeTable)
     public static final QueryItem[] direction_JRlinear = {
             new QueryItem("上り", "odpt.RailDirection:Inbound"),

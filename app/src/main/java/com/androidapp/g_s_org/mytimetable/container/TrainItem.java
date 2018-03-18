@@ -19,13 +19,9 @@ public class TrainItem {
     // delay from the planned arrival time
     private String mDelay;
     // destination of this train (some trains does not have)
-    private String mDestination;
-    // destination of this train used for query
-    private String mDestinationForQuery;
+    private QueryItem mDestination;
     // type of this train(e.g. "local","rapid") (some trains does not have)
-    private String mTrainType;
-    // type of this train used for query
-    private String mTrainTypeForQuery;
+    private QueryItem mTrainType;
     // direction of this train
     private String mDirection;
 
@@ -39,17 +35,16 @@ public class TrainItem {
         this.mToStation = toStation;
         this.mTimeToDepart = "";
         this.mDelay = delay;
-        this.mDestination = destination;
-        this.mDestinationForQuery = destinationForQuery;
-        this.mTrainType = trainType;
-        this.mTrainTypeForQuery = trainTypeForQuery;
+        this.mDestination = new QueryItem(destination, destinationForQuery);
+        this.mTrainType = new QueryItem(trainType, trainTypeForQuery);
         this.mDirection = direction;
     }
 
     public TrainItem(String timeToDepart, String destinationForQuery, String trainTypeForQuery) {
         mTimeToDepart = timeToDepart;
-        mDestinationForQuery = destinationForQuery;
-        mTrainTypeForQuery = trainTypeForQuery;
+        this.mDestination = new QueryItem("", destinationForQuery);
+        this.mTrainType = new QueryItem("", trainTypeForQuery);
+
     }
 
     public String getToStation() {
@@ -96,19 +91,16 @@ public class TrainItem {
         }
     }
 
-    public String getDestination() {
+    public QueryItem getDestination() {
         return mDestination;
     }
 
-    public String getTrainType() {
-        return mTrainType;
-    }
 
-    public String getDestinationName() {
-        return getSplitedbyCommaColon(mDestinationForQuery);
-    }
+
 
     public String getTrainTypeName() {
+        return mTrainType.getName();
+        /*
         if (mTrainType != null){
             // isNullOrEmpty(mTrainTypeForQuery)
             if (mTrainTypeForQuery == null) {
@@ -162,7 +154,6 @@ public class TrainItem {
 
         return getSplitedbyCommaColon(mTrainTypeForQuery);
 
-        /*
         if (mTrainType != null) {
             if (mTrainType.equals("") == false) {
                 return mTrainType;
@@ -190,6 +181,7 @@ public class TrainItem {
         */
     }
 
+/*
     public String getSplitedbyCommaColon(String src){
         if (src != null) {
             // split by comma
@@ -204,5 +196,5 @@ public class TrainItem {
         }
         return "";
     }
-
+*/
 }

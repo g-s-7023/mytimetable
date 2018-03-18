@@ -1,10 +1,11 @@
 package com.androidapp.g_s_org.mytimetable.container;
 
-        import com.androidapp.g_s_org.mytimetable.common.TimeUtil;
+        import com.androidapp.g_s_org.mytimetable.common.DateUtil;
 
         import java.util.ArrayList;
         import java.util.Calendar;
         import java.util.List;
+        import java.util.Map;
 
         import static com.androidapp.g_s_org.mytimetable.common.Common.*;
 
@@ -19,9 +20,9 @@ public class StationItem {
     // information of the three trains nearest to this station
     private List<TrainItem> mTrains;
     // order of stations of the line which this station belongs to
-    private List<QueryItem> mStationsOfLine;
+    private Map<String, String> mStationsOfLine;
     // operator
-    private String mOperator;
+    private Operator mOperator;
     // timetableType
     private int mTimeTableType;
     //===
@@ -37,8 +38,21 @@ public class StationItem {
     private String mStationForQuery;
     private String mDirectionForQuery;
     // protected String stationNameForQuery;
-
+/*
     public StationItem(int id, String operator, int timeTableType, String line, String stationName, String direction, String lineForQuery, String stationForQuery, String directionForQuery) {
+        mId = id;
+        mOperatorName = operator;
+        mTimeTableType = timeTableType;
+        mLine = line;
+        mStationName = stationName;
+        mDirection = direction;
+        mLineForQuery = lineForQuery;
+        mStationForQuery = stationForQuery;
+        mDirectionForQuery = directionForQuery;
+        mTrains = new ArrayList<>();
+    }
+*/
+    public StationItem(int id, Operator operator, int timeTableType, String line, String stationName, String direction, String lineForQuery, String stationForQuery, String directionForQuery) {
         mId = id;
         mOperator = operator;
         mTimeTableType = timeTableType;
@@ -51,29 +65,7 @@ public class StationItem {
         mTrains = new ArrayList<>();
     }
 
-    public StationItem(int id, String line, String stationName, String direction, String lineForQuery, String stationForQuery, String directionForQuery) {
-        mId = id;
-        mLine = line;
-        mStationName = stationName;
-        mDirection = direction;
-        mLineForQuery = lineForQuery;
-        mStationForQuery = stationForQuery;
-        mDirectionForQuery = directionForQuery;
-        mTrains = new ArrayList<>();
-    }
-
-
-    // constructor for test
-    public StationItem(int id, String stationName) {
-        this.mId = id;
-        this.mStationName = stationName;
-        // set order of station(本来はDBから)
-        // this.mOrder = new StationOrder(this.lineForQuery);
-    }
-
-    public String getOperator(){
-        return mOperator;
-    }
+    public Operator getOperator(){ return mOperator; }
 
     public int getTimeTableType(){ return mTimeTableType; }
 
@@ -113,8 +105,16 @@ public class StationItem {
         mTrains = trains;
     }
 
-    public void setStationsOfLine(List<QueryItem> list){
-        mStationsOfLine = list;
+    public void setStationsOfLine(Map<String, String> map){
+        mStationsOfLine = map;
+    }
+
+    public String searchNameOfStation(String nameForQuery){
+        String name = "";
+        if (mStationsOfLine.containsKey(nameForQuery)){
+            name = mStationsOfLine.get(nameForQuery);
+        }
+        return name;
     }
 
     // get first three trains and add them to mTrains
@@ -139,7 +139,7 @@ public class StationItem {
     }
 
     public String makeURLForStationTimetable(Calendar now){
-        String cal = TimeUtil.getTypeOfDay(now, mOperator, mLineForQuery);
+        String cal = DateUtil.getTypeOfDay(now, mOperator);
         StringBuilder url = new StringBuilder();
         url.append(PATH_API)
                 .append(QUERY_STATIONTIMETABLE)
@@ -152,8 +152,4 @@ public class StationItem {
                 .append(KEY_TOKEN).append("=").append(ACCESSTOKEN);
         return url.toString();
     }
-    /*
-    public String searchNameForStation(String stationForQuery){
-    }
-    */
 }
