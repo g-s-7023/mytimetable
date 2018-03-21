@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidapp.g_s_org.mytimetable.common.Common;
-import com.androidapp.g_s_org.mytimetable.container.QueryItem;
-import com.androidapp.g_s_org.mytimetable.dbaccess.StationsOfLineAccessHelper;
 import com.androidapp.g_s_org.mytimetable.httpaccess.HttpGetTrafficAPI;
 import com.androidapp.g_s_org.mytimetable.R;
 import com.androidapp.g_s_org.mytimetable.dbaccess.StationAccessHelper;
@@ -227,7 +225,7 @@ public class StationsFragment extends Fragment {
             stationDb = stationHelper.getReadableDatabase();
             // get data from DB
             stationCursor = stationDb.query(
-                    StationAccessHelper.TABLE_NAME,
+                    StationAccessHelper.TABLE_STATION,
                     new String[]{"id", "tabId", "rowId", "operator", "line", "lineForQuery", "stationName", "stationNameForQuery", "direction", "directionForQuery"},
                     "tabId=?",
                     new String[]{Integer.toString(sectionNumber)},
@@ -258,17 +256,11 @@ public class StationsFragment extends Fragment {
                     //===
                     //=== read data from line table and store them to list
                     //===
-                    // DB AccessHelperodpt:stationTitle
-                    StationsOfLineAccessHelper lineHelper = new StationsOfLineAccessHelper(caller);
-                    // DB
-                    SQLiteDatabase lineDb = null;
                     // Cursor
                     Cursor lineCursor = null;
-                    // get DB object
-                    lineDb = lineHelper.getReadableDatabase();
                     // get data from DB
-                    lineCursor = lineDb.query(
-                            StationsOfLineAccessHelper.TABLE_NAME,
+                    lineCursor = stationDb.query(
+                            StationAccessHelper.TABLE_STATIONOFLINE,
                             new String[]{"id", "stationId", "stationName", "stationNameForQuery"},
                             "stationId=?",
                             new String[]{Integer.toString(stationId)},

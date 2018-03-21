@@ -63,7 +63,7 @@ public class TitleAccessHelper extends SQLiteOpenHelper {
             db.beginTransaction();
             // insert values
             for (int i = 0; i < NUMOFTABS; i++){
-                db.insert(TABLE_NAME, null, cvs[i]);
+                db.insert(TABLE_STATION, null, cvs[i]);
             }
             // commit
             db.setTransactionSuccessful();

@@ -14,7 +14,6 @@ package com.androidapp.g_s_org.mytimetable.view;
         import android.widget.Button;
 
         import com.androidapp.g_s_org.mytimetable.common.Common;
-        import com.androidapp.g_s_org.mytimetable.dbaccess.StationsOfLineAccessHelper;
         import com.androidapp.g_s_org.mytimetable.httpaccess.HttpGetTrafficAPI;
         import com.androidapp.g_s_org.mytimetable.container.QueryItem;
         import com.androidapp.g_s_org.mytimetable.R;
@@ -289,7 +288,6 @@ public class AddStationActivity extends AppCompatActivity {
         //===
         // create AccessHelper
         StationAccessHelper saHelper = new StationAccessHelper(AddStationActivity.this);
-        StationsOfLineAccessHelper solaHelper = new StationsOfLineAccessHelper(AddStationActivity.this);
         // SQLiteDatabase
         SQLiteDatabase db = null;
         // ContentValues object for storing values to insert
@@ -300,16 +298,12 @@ public class AddStationActivity extends AppCompatActivity {
             db = saHelper.getWritableDatabase();
             // begin transaction
             db.beginTransaction();
-            // execute SQL
-            long insertedId = db.insert(StationAccessHelper.TABLE_NAME, null, cvStation);
+            // insert to table_station
+            long insertedId = db.insert(StationAccessHelper.TABLE_STATION, null, cvStation);
             // get id of the inserted entry and put it to the line table
             ContentValues cvLine = mStation.getContentsValuesOfLine((int)insertedId);
-
-
-            // dbを使いまわすか、もう一つ用意してinsert実行
-
-
-            db.insert(StationsOfLineAccessHelper.TABLE_NAME, null, cvLine);
+            // insert to table_stationsOfLine
+            db.insert(StationAccessHelper.TABLE_STATIONOFLINE, null, cvLine);
             // commit
             db.setTransactionSuccessful();
         } catch (Exception e) {

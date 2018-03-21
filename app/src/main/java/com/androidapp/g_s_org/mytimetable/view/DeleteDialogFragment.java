@@ -69,7 +69,7 @@ public class DeleteDialogFragment extends DialogFragment {
                             db.beginTransaction();
                             // get data from DB
                             cursor = db.query(
-                                    StationAccessHelper.TABLE_NAME,
+                                    StationAccessHelper.TABLE_STATION,
                                     new String[]{"id", "rowId"},
                                     "tabId=? AND rowId>?",
                                     new String[]{Integer.toString(mTabIdToDelete), Integer.toString(mRowIdToDelete)},
@@ -88,7 +88,7 @@ public class DeleteDialogFragment extends DialogFragment {
                             db = helper.getWritableDatabase();
                             // delete the row
                             db.delete(
-                                    StationAccessHelper.TABLE_NAME,
+                                    StationAccessHelper.TABLE_STATION,
                                     "tabId=? and rowId=?",
                                     new String[]{Integer.toString(mTabIdToDelete), Integer.toString(mRowIdToDelete)}
                             );
@@ -96,7 +96,7 @@ public class DeleteDialogFragment extends DialogFragment {
                             for (int index = 0; index < idsToDecrement.size(); index++) {
                                 id = idsToDecrement.keyAt(index);
                                 cv.put("rowId", idsToDecrement.get(id) - 1);
-                                db.update(StationAccessHelper.TABLE_NAME, cv, "id = ?", new String[]{Integer.toString(id)});
+                                db.update(StationAccessHelper.TABLE_STATION, cv, "id = ?", new String[]{Integer.toString(id)});
                             }
                             // commit
                             db.setTransactionSuccessful();

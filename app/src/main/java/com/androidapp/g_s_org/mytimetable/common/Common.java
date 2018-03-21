@@ -18,7 +18,7 @@ package com.androidapp.g_s_org.mytimetable.common;
 // なぜか駅が2つ消える
 
 // todo
-// 駅名の日本語化
+// 駅名の日本語化(DBの読み書きでうまくいかない)
 // 在線情報を出している事業者がJRとメトロだけなので、駅時刻表から渡すのも必要
 // operator周りの整理
 // stringリソースをまとめて、commonを整理

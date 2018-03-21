@@ -13,17 +13,20 @@ package com.androidapp.g_s_org.mytimetable.dbaccess;
 
 public class StationAccessHelper extends SQLiteOpenHelper {
     // version of DB
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     // name of DB
-    public static final String TABLE_NAME = "stationDB";
-    // string for outputting log
+    public static final String DB_NAME = "stationDB";
+    // name of TABLE
+    public static final String OLDTABLE = "stationDB";
+    public static final String TABLE_STATION = "table_station";
+    public static final String TABLE_STATIONOFLINE = "table_stationOfLine";
     private static final String TAG = "StationAccessHelper";
 
     // constructor
     public StationAccessHelper(Context con)
     {
         // if DB has not been created, new DB is created
-        super(con, TABLE_NAME, null, 1);
+        super(con, DB_NAME, null, DATABASE_VERSION);
     }
 
     // executed when DB is created
@@ -31,7 +34,7 @@ public class StationAccessHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         // SQL for creating DB
-        String sql = "create table " + TABLE_NAME + " (" +
+        String sqlStation = "create table " + TABLE_STATION + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "tabId INTEGER not null," +
                 "rowId INTEGER not null," +
@@ -43,7 +46,14 @@ public class StationAccessHelper extends SQLiteOpenHelper {
                 "direction TEXT," +
                 "directionForQuery TEXT)";
         // execute SQL
-        db.execSQL(sql);
+        db.execSQL(sqlStation);
+        // SQL for creating DB
+        String sqlStationsOfLine = "create table " + TABLE_STATIONOFLINE + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "stationId INTEGER not null," +
+                "stationName TEXT not null," +
+                "stationNameForQuery TEXT not null)";
+        db.execSQL(sqlStationsOfLine);
     }
 
     @Override
@@ -54,7 +64,7 @@ public class StationAccessHelper extends SQLiteOpenHelper {
         try
         {
             // delete old DB
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATION);
             // create new DB
             onCreate(db);
         }
