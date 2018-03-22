@@ -104,8 +104,6 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
                 trainDestination = train.getDestination().getName();
             }
             holder.destination1View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType1View.setText(train.getTrainTypeName());
-//            holder.destination1View.setText(train.getDestinationName());
             holder.time1View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
         }
         // 2nd train
@@ -118,8 +116,6 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
                 trainDestination = train.getDestination().getName();
             }
             holder.destination2View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType2View.setText(train.getTrainTypeName());
-//            holder.destination2View.setText(train.getDestinationName());
             holder.time2View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
         }
         // 3rd train
@@ -132,8 +128,6 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
                 trainDestination = train.getDestination().getName();
             }
             holder.destination3View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType3View.setText(train.getTrainTypeName());
-//            holder.destination3View.setText(train.getDestinationName());
             holder.time3View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
         }
         /*

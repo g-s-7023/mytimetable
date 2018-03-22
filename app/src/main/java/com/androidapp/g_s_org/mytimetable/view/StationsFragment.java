@@ -274,6 +274,7 @@ public class StationsFragment extends Fragment {
                         );
                     }
                     stationItem.setStationsOfLine(stationsOfLine);
+                    list.add(stationItem);
                 }
             }
         } catch (Exception e) {

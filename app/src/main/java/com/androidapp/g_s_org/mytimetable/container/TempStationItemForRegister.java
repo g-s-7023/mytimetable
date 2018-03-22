@@ -145,14 +145,16 @@ public class TempStationItemForRegister {
     }
 
     // return contents used for registering to DB
-    public ContentValues getContentsValuesOfLine(int stationId){
-        ContentValues cv = new ContentValues();
+    public List<ContentValues> getContentsValuesOfLine(int stationId){
+        List<ContentValues> cvList = new ArrayList<>();
         for (QueryItem q : mStationHistory){
+            ContentValues cv = new ContentValues();
             cv.put("stationId", stationId);
             cv.put("stationName", q.getName());
             cv.put("stationNameForQuery", q.getValueForQuery());
+            cvList.add(cv);
         }
-        return cv;
+        return cvList;
     }
 
     // return Japanese name for the given direction
