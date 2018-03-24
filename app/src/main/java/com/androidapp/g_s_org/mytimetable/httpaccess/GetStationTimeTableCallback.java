@@ -1,6 +1,7 @@
 package com.androidapp.g_s_org.mytimetable.httpaccess;
 
 import android.util.Log;
+import android.util.SparseIntArray;
 
 import com.androidapp.g_s_org.mytimetable.adapter.StationRecyclerViewAdapter;
 import com.androidapp.g_s_org.mytimetable.container.StationItem;
@@ -25,15 +26,23 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_TRAINTYPETITL
 
 public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
     private static GetStationTimeTableCallback mCallback = new GetStationTimeTableCallback();
-    private StationRecyclerViewAdapter mAdapter;
-    private Calendar mGotDate;
-    private Map<Integer, List<TrainItem>> mTrains;
-
+    private static StationRecyclerViewAdapter mAdapter;
+    private static Calendar mGotDate;
+    private static SparseIntArray mTrainNumToGet;
+    private static SparseIntArray mFilterDate;
 
     private GetStationTimeTableCallback() {
     }
 
     public static GetStationTimeTableCallback getCallback() {
+        return mCallback;
+    }
+
+    public static GetStationTimeTableCallback newCallback(StationRecyclerViewAdapter adapter, Calendar date){
+        mAdapter = adapter;
+        mGotDate = date;
+        mTrainNumToGet = new SparseIntArray();
+        mFilterDate = new SparseIntArray();
         return mCallback;
     }
 
@@ -45,14 +54,14 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
         mGotDate = date;
     }
 
+    public void setTrainNumToGet(int row, int trainNumToGet){ mTrainNumToGet.append(row, trainNumToGet); }
+
+    public void setFilterDate(int row, int date){
+        mFilterDate.append(row, date);
+    }
+
     @Override
     public void callback(JSONArray result, int position) {
-
-
-        // 追加取得に対応できるように作り直し
-
-
-
         // display information of for trains nearest to this station
         List<TrainItem> trains = new ArrayList<>();
         HashMap<String, TrainItem> trainMap = new HashMap<>();

@@ -1,10 +1,12 @@
 package com.androidapp.g_s_org.mytimetable.httpaccess;
 
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.androidapp.g_s_org.mytimetable.adapter.StationRecyclerViewAdapter;
 import com.androidapp.g_s_org.mytimetable.container.StationItem;
 import com.androidapp.g_s_org.mytimetable.container.TrainItem;
+import com.androidapp.g_s_org.mytimetable.view.StationsFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,16 +27,25 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.TRAINSNUM_DISPLAY
 
 public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
     private static GetTrainTimeTableCallback mCallback = new GetTrainTimeTableCallback();
-    private StationRecyclerViewAdapter mAdapter;
+    private static Fragment mCaller;
+    private static StationRecyclerViewAdapter mAdapter;
     // map to store the list of trains got by calling API from each station
-    private HashMap<Integer, HashMap<String, TrainItem>> mTrainMapMap;
-    private Calendar mGotDate;
+    private static HashMap<Integer, HashMap<String, TrainItem>> mTrainMapMap;
+    private static Calendar mGotDate;
 
 
     private GetTrainTimeTableCallback() {
     }
 
     public static GetTrainTimeTableCallback getCallback() {
+        return mCallback;
+    }
+
+    public static GetTrainTimeTableCallback newCallback(Fragment caller, StationRecyclerViewAdapter adapter, Calendar date){
+        mCaller = caller;
+        mAdapter = adapter;
+        mGotDate = date;
+        mTrainMapMap = new HashMap<>();
         return mCallback;
     }
 
@@ -104,7 +115,6 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
         }
         int nowMinute = mGotDate.get(Calendar.MINUTE);
 
-
         // declare new list for sorting
         // (mTrainMapMap cannot be added or removed from multiple threads at the same time)
         List<TrainItem> trainsForSort = new ArrayList<>();
@@ -165,22 +175,28 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
         });
         // get first three trains and add them to mTrains
         int numOfTrains = trainsForSort.size();
+        List<TrainItem> trainsToSet = new ArrayList<>();
+        for (int i = 0; i < TRAINSNUM_DISPLAY; i++) {
+            trainsToSet.add(trainsForSort.get(i));
+        }
+        stationItem.setTrains(trainsToSet);
         if (numOfTrains >= TRAINSNUM_DISPLAY){
-            List<TrainItem> trainsToSet = new ArrayList<>();
-            for (int i = 0; i < TRAINSNUM_DISPLAY; i++) {
-                trainsToSet.add(trainsForSort.get(i));
-            }
-            stationItem.setTrains(trainsToSet);
             mAdapter.notifyItemChanged(position);
         } else {
             // if num of trainsForSort is short of trainsNum to display
-            // get addtional trains from stationTimeTable
-
-
-
-            // 追加でgetするプログラム
-
-
+            // get addtional trains' info from stationTimeTable
+            GetStationTimeTableCallback gsttCallback = GetStationTimeTableCallback.getCallback();
+            // set station timetable callback
+            gsttCallback.setTrainNumToGet(position, TRAINSNUM_DISPLAY - numOfTrains);
+            gsttCallback.setFilterDate
+            // make url
+            String urlForStationTimetable = stationItem.makeURLForStationTimetable(mGotDate);
+            // http access
+            HttpGetTrafficAPI httpForStationTimetable = new HttpGetTrafficAPI(urlForStationTimetable, position, gsttCallback);
+            httpForStationTimetable.execute();
+            if (mCaller instanceof StationsFragment) {
+                ((StationsFragment) mCaller).addTask(httpForStationTimetable);
+            }
         }
         stationItem.resetTrains(trainsForSort);
         mAdapter.notifyItemChanged(position);

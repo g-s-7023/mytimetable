@@ -35,6 +35,7 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.ARG_SECTION_NUMBE
 import static com.androidapp.g_s_org.mytimetable.common.Common.NONE;
 import static com.androidapp.g_s_org.mytimetable.common.Common.REALTIME;
 import static com.androidapp.g_s_org.mytimetable.common.Common.STATIC;
+import static com.androidapp.g_s_org.mytimetable.common.Common.TRAINSNUM_DISPLAY;
 
 public class StationsFragment extends Fragment {
     /**
@@ -158,17 +159,9 @@ public class StationsFragment extends Fragment {
         // get date
         Calendar now = Calendar.getInstance();
         // set callback
-        GetTrainsPositionCallback gtpCallback = GetTrainsPositionCallback.getCallback();
-        gtpCallback.setCaller(this);
-        gtpCallback.setAdapter(mAdapter);
-        gtpCallback.setSectionNumWhenCreated(mSectionNumber);
-        GetTrainTimeTableCallback gtttCallback = GetTrainTimeTableCallback.getCallback();
-        gtttCallback.newTrainMapMap();
-        gtttCallback.setAdapter(mAdapter);
-        gtttCallback.setGotDate(now);
-        GetStationTimeTableCallback gsttCallback = GetStationTimeTableCallback.getCallback();
-        gsttCallback.setAdapter(mAdapter);
-        gsttCallback.setGotDate(now);
+        GetTrainsPositionCallback gtpCallback = GetTrainsPositionCallback.newCallback(this, mAdapter, now, mSectionNumber);
+        GetTrainTimeTableCallback gtttCallback = GetTrainTimeTableCallback.newCallback(this, mAdapter, now);
+        GetStationTimeTableCallback gsttCallback = GetStationTimeTableCallback.newCallback(mAdapter, now);
         // get information of train
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             // get stationItem
@@ -183,6 +176,8 @@ public class StationsFragment extends Fragment {
                     mRunningTask.add(http);
                     break;
                 case STATIC:
+                    // set station timetable callback
+                    gsttCallback.setTrainNumToGet(i, TRAINSNUM_DISPLAY);
                     // make url
                     String urlForStationTimetable = item.makeURLForStationTimetable(now);
                     // http access

@@ -128,6 +128,15 @@ public class StationItem {
         }
     }
 
+    // append trains
+    public void appendTrains(List<TrainItem> trains, int appendNum){
+        if (mTrains != null) {
+            for (int i = 0; i < trains.size() && i < TRAINSNUM_DISPLAY; i++) {
+                mTrains.add(trains.get(i));
+            }
+        }
+    }
+
     public String makeURLForTrain() {
         StringBuilder url = new StringBuilder();
         url.append(PATH_API)
