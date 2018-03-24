@@ -301,9 +301,11 @@ public class AddStationActivity extends AppCompatActivity {
             // insert to table_station
             long insertedId = db.insert(StationAccessHelper.TABLE_STATION, null, cvStation);
             // get id of the inserted entry and put it to the line table
-            ContentValues cvLine = mStation.getContentsValuesOfLine((int)insertedId);
-            // insert to table_stationsOfLine
-            db.insert(StationAccessHelper.TABLE_STATIONOFLINE, null, cvLine);
+            List<ContentValues> stationList = mStation.getContentsValuesOfLine((int)insertedId);
+            for (ContentValues s : stationList){
+                // insert to table_stationsOfLine
+                db.insert(StationAccessHelper.TABLE_STATIONOFLINE, null, s);
+            }
             // commit
             db.setTransactionSuccessful();
         } catch (Exception e) {

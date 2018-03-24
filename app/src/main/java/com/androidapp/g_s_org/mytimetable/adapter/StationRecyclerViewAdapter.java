@@ -1,22 +1,22 @@
 package com.androidapp.g_s_org.mytimetable.adapter;
 
-        import android.support.v7.widget.RecyclerView;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 
-        import com.androidapp.g_s_org.mytimetable.R;
-        import com.androidapp.g_s_org.mytimetable.container.StationItem;
-        import com.androidapp.g_s_org.mytimetable.container.TrainItem;
+import com.androidapp.g_s_org.mytimetable.R;
+import com.androidapp.g_s_org.mytimetable.container.StationItem;
+import com.androidapp.g_s_org.mytimetable.container.TrainItem;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
-        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_DIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_LINE;
-        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_ROTATEDIRECTION;
-        import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_SEN;
+import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_DIRECTION;
+import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_LINE;
+import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_ROTATEDIRECTION;
+import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_SEN;
 
 
 public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecyclerViewAdapter.ViewHolder> {
@@ -100,13 +100,16 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
             trainType = train.getTrainTypeName();
             holder.trainType1View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
-            if (trainDestination.equals("")){
+            if (trainDestination.equals("")) {
                 trainDestination = train.getDestination().getName();
             }
             holder.destination1View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType1View.setText(train.getTrainTypeName());
-//            holder.destination1View.setText(train.getDestinationName());
             holder.time1View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
+        } else {
+            // prevent adapter from setting the previous row's data
+            holder.trainType1View.setText("");
+            holder.destination1View.setText("");
+            holder.time1View.setText("");
         }
         // 2nd train
         train = station.getTrainItem(1);
@@ -114,13 +117,16 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
             trainType = train.getTrainTypeName();
             holder.trainType2View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
-            if (trainDestination.equals("")){
+            if (trainDestination.equals("")) {
                 trainDestination = train.getDestination().getName();
             }
             holder.destination2View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType2View.setText(train.getTrainTypeName());
-//            holder.destination2View.setText(train.getDestinationName());
             holder.time2View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
+        } else {
+            // prevent adapter from setting the previous row's data
+            holder.trainType2View.setText("");
+            holder.destination2View.setText("");
+            holder.time2View.setText("");
         }
         // 3rd train
         train = station.getTrainItem(2);
@@ -128,22 +134,17 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
             trainType = train.getTrainTypeName();
             holder.trainType3View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
-            if (trainDestination.equals("")){
+            if (trainDestination.equals("")) {
                 trainDestination = train.getDestination().getName();
             }
             holder.destination3View.setText(trainDestination.length() < 13 ? trainDestination : trainDestination.substring(0, 12));
-//            holder.trainType3View.setText(train.getTrainTypeName());
-//            holder.destination3View.setText(train.getDestinationName());
             holder.time3View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
+        } else {
+            // prevent adapter from setting the previous row's data
+            holder.trainType3View.setText("");
+            holder.destination3View.setText("");
+            holder.time3View.setText("");
         }
-        /*
-        train = station.getTrainItem(3);
-        if (train != null) {
-            holder.trainType4View.setText(train.getTrainTypeName());
-            holder.destination4View.setText(train.getDestinationName());
-            holder.time4View.setText(train.getDelay().equals("") ? train.getTimeToDepart() : train.getTimeToDepart() + " + " + train.getDelay());
-        }
-        */
         // when a row is longclicked
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
