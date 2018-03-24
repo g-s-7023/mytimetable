@@ -17,14 +17,11 @@ package com.androidapp.g_s_org.mytimetable.common;
 // 画面名を変更するメソッドの作成
 // なぜか駅が2つ消える
 // 駅名の日本語化(DBの読み書きでうまくいかない)
+// 2回押すと、空白のところに前の行のデータが入ってくる
+// >viewholderに勝手に当てはめられるっぽいので、trainがnullのときは明示的に空文字を入れるようにする
 
 // todo
-// 2回押すと、空白のところに前の行のデータが入ってくる
-// viewholderに勝手に当てはめられるっぽいので、trainがnullのときは明示的に空文字を入れるようにする
-
-
 // 在線情報を出している事業者がJRとメトロだけなので、駅時刻表から渡すのも必要
-// operator周りの整理
 // stringリソースをまとめて、commonを整理
 // 列車の種別も整理する
 
@@ -132,7 +129,7 @@ public class Common {
     //===
     public static final int NODISTINGUISH_SATURDAY = 1;
     public static final int DISTINGUISH_SATURDAY = 2;
-    public static final int DISTINGUISH_OTHERWAYS = 3;
+    public static final int DISTINGUISH_INOTHERWAYS = 3;
     //===
     //=== opertor name(temporary)
     //===
@@ -151,14 +148,14 @@ public class Common {
         JREast("JR東日本", "odpt.Operator:JR-East", REALTIME, NODISTINGUISH_SATURDAY),
         Keikyu("京急電鉄", "odpt.Operator:Keikyu", STATIC, DISTINGUISH_SATURDAY),
         Keio("京王電鉄", "odpt.Operator:Keio", STATIC, NODISTINGUISH_SATURDAY),
-        Keisei("京成電鉄", "odpt.Operator:Keisei", NONE, DISTINGUISH_OTHERWAYS),
-        Odakyu("小田急電鉄", "odpt.Operator:Odakyu", NONE, DISTINGUISH_OTHERWAYS),
-        Seibu("西武鉄道", "odpt.Operator:Seibu", NONE, DISTINGUISH_OTHERWAYS),
+        Keisei("京成電鉄", "odpt.Operator:Keisei", NONE, DISTINGUISH_INOTHERWAYS),
+        Odakyu("小田急電鉄", "odpt.Operator:Odakyu", NONE, DISTINGUISH_INOTHERWAYS),
+        Seibu("西武鉄道", "odpt.Operator:Seibu", NONE, DISTINGUISH_INOTHERWAYS),
         Tobu("東武鉄道", "odpt.Operator:Tobu", STATIC, DISTINGUISH_SATURDAY),
         Toei("都営", "odpt.Operator:Toei", STATIC, NODISTINGUISH_SATURDAY),
-        Tokyu("東急電鉄", "odpt.Operator:Tokyu", NONE, DISTINGUISH_OTHERWAYS),
+        Tokyu("東急電鉄", "odpt.Operator:Tokyu", NONE, DISTINGUISH_INOTHERWAYS),
         Rinkai("東京臨海高速鉄道", "odpt.Operator:TWR", STATIC, DISTINGUISH_SATURDAY),
-        Yurikamome("ゆりかもめ", "odpt.Operator:Yurikamome", NONE, DISTINGUISH_OTHERWAYS);
+        Yurikamome("ゆりかもめ", "odpt.Operator:Yurikamome", NONE, DISTINGUISH_INOTHERWAYS);
 
         // name of operator
         private String mName;
