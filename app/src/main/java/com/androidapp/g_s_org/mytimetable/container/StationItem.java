@@ -119,22 +119,28 @@ public class StationItem {
 
     // get first three trains and add them to mTrains
     public void resetTrains(List<TrainItem> trains) {
-        if (mTrains == null) {
-            mTrains = new ArrayList<>();
-        }
-        mTrains.clear();
-        for (int i = 0; i < trains.size() && i < TRAINSNUM_DISPLAY; i++) {
-            mTrains.add(trains.get(i));
+        if (mTrains != null) {
+            mTrains.clear();
+            for (int i = 0; i < trains.size() && i < TRAINSNUM_DISPLAY; i++) {
+                mTrains.add(trains.get(i));
+            }
         }
     }
 
     // append trains
     public void appendTrains(List<TrainItem> trains, int appendNum){
         if (mTrains != null) {
-            for (int i = 0; i < trains.size() && i < TRAINSNUM_DISPLAY; i++) {
-                mTrains.add(trains.get(i));
+            for (int i = 0; i < appendNum && i < trains.size(); i++) {
+                if (mTrains.size() < TRAINSNUM_DISPLAY) {
+                    mTrains.add(trains.get(i));
+                }
             }
         }
+    }
+
+    // initialize mTrains
+    public void initTrains(){
+        mTrains.clear();
     }
 
     public String makeURLForTrain() {

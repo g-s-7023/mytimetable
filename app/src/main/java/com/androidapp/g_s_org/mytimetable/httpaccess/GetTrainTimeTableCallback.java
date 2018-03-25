@@ -176,7 +176,7 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
         // get first three trains and add them to mTrains
         int numOfTrains = trainsForSort.size();
         List<TrainItem> trainsToSet = new ArrayList<>();
-        for (int i = 0; i < TRAINSNUM_DISPLAY; i++) {
+        for (int i = 0; i < TRAINSNUM_DISPLAY && i < numOfTrains; i++) {
             trainsToSet.add(trainsForSort.get(i));
         }
         stationItem.setTrains(trainsToSet);
@@ -188,7 +188,27 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
             GetStationTimeTableCallback gsttCallback = GetStationTimeTableCallback.getCallback();
             // set station timetable callback
             gsttCallback.setTrainNumToGet(position, TRAINSNUM_DISPLAY - numOfTrains);
-            gsttCallback.setFilterDate
+            if (numOfTrains == 0){
+                gsttCallback.setFilterDate(position, mGotDate);
+            } else {
+                // set filter date to pass GetStationTimeTableCallback
+                String filterDate = trainsToSet.get(numOfTrains - 1).getTimeToDepart();
+                String[] time = filterDate.split(":", 0);
+                // time should contain only two elements(hour, minute)
+                if (time.length == 2) {
+                    int filterHour = Integer.parseInt(time[0]);
+                    int filterMin = Integer.parseInt(time[1]);
+                    if (filterMin == 59){
+                        filterMin = 0;
+                        filterHour += 1;
+                    } else {
+                        filterMin += 1;
+                    }
+                    gsttCallback.setFilterDate(position, filterHour, filterMin);
+                } else {
+                    gsttCallback.setFilterDate(position, mGotDate);
+                }
+            }
             // make url
             String urlForStationTimetable = stationItem.makeURLForStationTimetable(mGotDate);
             // http access
@@ -198,7 +218,5 @@ public class GetTrainTimeTableCallback implements HttpGetTrafficAPI.HttpGetTraff
                 ((StationsFragment) mCaller).addTask(httpForStationTimetable);
             }
         }
-        stationItem.resetTrains(trainsForSort);
-        mAdapter.notifyItemChanged(position);
     }
 }

@@ -164,8 +164,9 @@ public class StationsFragment extends Fragment {
         GetStationTimeTableCallback gsttCallback = GetStationTimeTableCallback.newCallback(mAdapter, now);
         // get information of train
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            // get stationItem
+            // get stationItem and initialize trains
             StationItem item = mAdapter.getItem(i);
+            item.initTrains();
             switch (item.getTimeTableType()) {
                 case REALTIME:
                     // make url
@@ -178,6 +179,7 @@ public class StationsFragment extends Fragment {
                 case STATIC:
                     // set station timetable callback
                     gsttCallback.setTrainNumToGet(i, TRAINSNUM_DISPLAY);
+                    gsttCallback.setFilterDate(i, now);
                     // make url
                     String urlForStationTimetable = item.makeURLForStationTimetable(now);
                     // http access
@@ -189,7 +191,6 @@ public class StationsFragment extends Fragment {
                     // nothing
                     break;
             }
-
         }
         // set time of refresh to text view
         Activity caller = getActivity();

@@ -1,6 +1,7 @@
 package com.androidapp.g_s_org.mytimetable.httpaccess;
 
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import com.androidapp.g_s_org.mytimetable.adapter.StationRecyclerViewAdapter;
@@ -16,7 +17,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DEPARTURETIME;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_DESTINATIONSTATION;
@@ -28,8 +28,11 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
     private static GetStationTimeTableCallback mCallback = new GetStationTimeTableCallback();
     private static StationRecyclerViewAdapter mAdapter;
     private static Calendar mGotDate;
+    // key:row, val:number of trains to get in this callback
     private static SparseIntArray mTrainNumToGet;
-    private static SparseIntArray mFilterDate;
+    // get trains whose departure time is after filter date
+    // key:row, val:{hour, minute}
+    private static SparseArray<int[]> mFilterDates;
 
     private GetStationTimeTableCallback() {
     }
@@ -42,7 +45,7 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
         mAdapter = adapter;
         mGotDate = date;
         mTrainNumToGet = new SparseIntArray();
-        mFilterDate = new SparseIntArray();
+        mFilterDates = new SparseArray();
         return mCallback;
     }
 
@@ -56,8 +59,24 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
 
     public void setTrainNumToGet(int row, int trainNumToGet){ mTrainNumToGet.append(row, trainNumToGet); }
 
-    public void setFilterDate(int row, int date){
-        mFilterDate.append(row, date);
+    public void setFilterDate(int row, int hour, int min) {
+        int[] date = {hour, min};
+        mFilterDates.put(row, date);
+    }
+
+    public void setFilterDate(int row, Calendar date){
+        // get hour of date
+        // 0:00-2:59 is represented as 24:00-26:59
+        int hour = date.get(Calendar.HOUR);
+        if (date.get(Calendar.AM_PM) == Calendar.AM && hour < 3) {
+            hour += 24;
+        } else if (date.get(Calendar.AM_PM) == Calendar.PM) {
+            hour += 12;
+        }
+        int min = date.get(Calendar.MINUTE);
+        // get minute of date
+        int[] filterDate = {hour, min};
+        mFilterDates.put(row, filterDate);
     }
 
     @Override
@@ -71,6 +90,9 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
         //=== Parse JSON array
         //===
         try {
+            int[] filterDate = mFilterDates.get(position);
+            int filterHour = filterDate[0];
+            int filterMinute = filterDate[1];
             for (int i = 0; i < result.length(); i++) {
                 JSONObject timetableObject = result.getJSONObject(i);
                 // make list of trains whose direction matches that of the stationItem
@@ -86,15 +108,17 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
                         //===
                         //=== filter trainMap by whether each train is yet to depart
                         //===
+                        /*
                         // get hour of now
                         // 0:00-2:59 is represented as 24:00-26:59
-                        int nowHour = mGotDate.get(Calendar.HOUR);
-                        if (mGotDate.get(Calendar.AM_PM) == Calendar.AM && nowHour < 3) {
-                            nowHour += 24;
+                        int filterHour = mGotDate.get(Calendar.HOUR);
+                        if (mGotDate.get(Calendar.AM_PM) == Calendar.AM && filterHour < 3) {
+                            filterHour += 24;
                         } else if (mGotDate.get(Calendar.AM_PM) == Calendar.PM) {
-                            nowHour += 12;
+                            filterHour += 12;
                         }
-                        int nowMinute = mGotDate.get(Calendar.MINUTE);
+                        int filterMinute = mGotDate.get(Calendar.MINUTE);
+                        */
                         // compare now and timeToDepart (whether the train is yet to depart from the station)
                         if (timeToDepart.equals("") == false) {
                             String[] time = timeToDepart.split(":", 0);
@@ -105,7 +129,7 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
                                 hourToDepart += (hourToDepart < 3 ? 24 : 0);
                                 int minuteToDepart = Integer.parseInt(time[1]);
                                 // compare timeToDepart and now
-                                if (hourToDepart > nowHour || (hourToDepart == nowHour && minuteToDepart >= nowMinute)) {
+                                if (hourToDepart > filterHour || (hourToDepart == filterHour && minuteToDepart >= filterMinute)) {
                                     // if timeToDepart is later than or equal to now, add the train to ArrayList for sort
                                     TrainItem trainItem = new TrainItem(timeToDepart, terminalForQuery, trainTypeForQuery);
                                     trains.add(trainItem);
@@ -140,7 +164,8 @@ public class GetStationTimeTableCallback implements HttpGetTrafficAPI.HttpGetTra
                 return 0;
             }
         });
-        stationItem.resetTrains(trains);
+        //stationItem.resetTrains(trains);
+        stationItem.appendTrains(trains, mTrainNumToGet.get(position));
         mAdapter.notifyItemChanged(position);
     }
 }
