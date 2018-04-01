@@ -1,6 +1,11 @@
 package com.androidapp.g_s_org.mytimetable.container;
 
-        import static java.lang.Integer.parseInt;
+import com.androidapp.g_s_org.mytimetable.common.Common;
+
+import static com.androidapp.g_s_org.mytimetable.common.Common.TrainType;
+import static com.androidapp.g_s_org.mytimetable.common.Common.Operator;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Created by nao on 2018/02/18.
@@ -84,7 +89,7 @@ public class TrainItem {
                 }
                 // deley is assumed to be seconds
                 return Integer.toString(delay / 60);
-            } catch (Exception e){
+            } catch (Exception e) {
                 // cannot parseInt
                 return "";
             }
@@ -95,106 +100,16 @@ public class TrainItem {
         return mDestination;
     }
 
-
-
-
-    public String getTrainTypeName() {
-        return mTrainType.getName();
-        /*
-        if (mTrainType != null){
-            // isNullOrEmpty(mTrainTypeForQuery)
-            if (mTrainTypeForQuery == null) {
-                switch (mTrainType) {
-                    case "普通":
-                    case "各停":
-                    case "各駅停車":
-                        return "Local";
-                    case "快速":
-                        return "Rapid";
-                    case "中央特快":
-                        return "Chuo Limited Rapid";
-                    case "通勤特快":
-                        return "Commuter Limited Rapid";
-                    case "通勤快速":
-                        return "Commuter Rapid";
-                    case "急行":
-                        return "Express";
-                    case "準急":
-                        return "Semi Express";
-                    case "特急":
-                        return "Limited Express";
-                    default:
-                        return "";
-                }
-            } else if (mTrainTypeForQuery.equals("")){
-                switch (mTrainType) {
-                    case "普通":
-                    case "各停":
-                    case "各駅停車":
-                        return "Local";
-                    case "快速":
-                        return "Rapid";
-                    case "中央特快":
-                        return "Chuo Limited Rapid";
-                    case "通勤特快":
-                        return "Commuter Limited Rapid";
-                    case "通勤快速":
-                        return "Commuter Rapid";
-                    case "急行":
-                        return "Express";
-                    case "準急":
-                        return "Semi Express";
-                    case "特急":
-                        return "Limited Express";
-                    default:
-                        return "";
-                }
-            }
-        }
-
-        return getSplitedbyCommaColon(mTrainTypeForQuery);
-
+    public String getTrainTypeName(Operator op) {
         if (mTrainType != null) {
-            if (mTrainType.equals("") == false) {
-                return mTrainType;
+            // get last word of mTrainType
+            String trainTypeString = mTrainType.getLastWordOfQuery();
+            // search the japanese word corresponding to trainType
+            TrainType trainType = TrainType.getTrainType(trainTypeString);
+            if (trainType != null){
+                return trainType.typeOf(op);
             }
         }
-        if (mTrainTypeForQuery != null) {
-            if (Common.TrainTypeMap.containsKey(mTrainTypeForQuery)) {
-                return Common.TrainTypeMap.get(mTrainTypeForQuery);
-            }
-            String[] st1 = mTrainTypeForQuery.split("\\.", 0);
-            if (st1.length > 0) {
-                String[] st2 = st1[st1.length - 1].split(":", 0);
-                if (st2.length > 0) {
-                    String type = st2[st2.length - 1];
-                    for (QueryItem q : Common.trainTypeItems) {
-                        if (q.getValueForQuery().equals(type)) {
-                            return q.getValue();
-                        }
-                    }
-                    return type;
-                }
-            }
-        }
-        return "";
-        */
+        return mTrainType.getName();
     }
-
-/*
-    public String getSplitedbyCommaColon(String src){
-        if (src != null) {
-            // split by comma
-            String[] st1 = src.split("\\.", 0);
-            if (st1.length > 0) {
-                // split by colon
-                String[] st2 = st1[st1.length - 1].split(":", 0);
-                if (st2.length > 0) {
-                    return st2[st2.length - 1];
-                }
-            }
-        }
-        return "";
-    }
-*/
 }

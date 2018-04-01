@@ -1,43 +1,10 @@
 package com.androidapp.g_s_org.mytimetable.common;
 
+import com.androidapp.g_s_org.mytimetable.container.QueryItem;
 
-// done
-// 必要な情報を取ってきてパースするメソッドの作成
-// (駅時刻表ではなく、最も近い列車を5つ取得し、列車時刻表を列番で引っ掛けないと厳しい)
-// 情報を更新するメソッドの作成
-// 駅のdrawableを作る
-// 路線に対応した方面をAPIをたたいてGETするメソッドの作成
-// 初期設定値をDBから読みだすメソッドの作成
-// 日付の判定
-// 初期設定するダイアログと設定値をDBに書き込むメソッドの作成(createStation)
-// 駅の削除をするメソッドの作成
-// 駅のコードに対応したtitleをAPIをたたいてGETするメソッドの作成(可能なら方面の日本語名もgetしたい)
-// 方面とか線名が出ない場合があるので、きちんと表示させる
-// API取得中に画面切り替えると落ちると思われる(cancelの実装)
-// 画面名を変更するメソッドの作成
-// なぜか駅が2つ消える
-// 駅名の日本語化(DBの読み書きでうまくいかない)
-// 2回押すと、空白のところに前の行のデータが入ってくる
-// >viewholderに勝手に当てはめられるっぽいので、trainがnullのときは明示的に空文字を入れるようにする
-// 在線情報を出している事業者がJRとメトロだけなので、駅時刻表から渡すのも必要
-
-// todo
-// 中央線快速がとびとびで表示されることがある
-// stringリソースをまとめて、commonを整理
-// 列車の種別も整理する
-
-
-// レイアウトの修正
-// 画面切り替え時(とonDestroy?)でmTrainsListのリフレッシュするの忘れずに！
-// getでとれなかった場合に再送するメソッドの作成
-// 駅の並べ替えをするメソッドの作成
-
-
-        import com.androidapp.g_s_org.mytimetable.container.QueryItem;
-
-        import java.util.Calendar;
-        import java.util.HashMap;
-        import java.util.Map;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 // class for declare common valuable
 public class Common {
@@ -141,6 +108,7 @@ public class Common {
     public static final String TOBU = "odpt.Operator:Tobu";
     public static final String TOEI = "odpt.Operator:Toei";
     public static final String RINKAI = "odpt.Operator:TWR";
+
     //===
     //=== operator
     //===
@@ -173,6 +141,7 @@ public class Common {
             mTypeOfTimetable = typeOfTimetable;
             mSaturdayAndHoliday = saturdayAndHoliday;
         }
+
         public String getName() {
             return mName;
         }
@@ -181,9 +150,13 @@ public class Common {
             return mNameForQuery;
         }
 
-        public int getTypeOfTimetable(){ return mTypeOfTimetable; }
+        public int getTypeOfTimetable() {
+            return mTypeOfTimetable;
+        }
 
-        public int getSaturdayAndHoliday(){ return mSaturdayAndHoliday; }
+        public int getSaturdayAndHoliday() {
+            return mSaturdayAndHoliday;
+        }
     }
 
     //===
@@ -217,26 +190,153 @@ public class Common {
     //===
     //=== type of train
     //===
-    public static final Map<String, String> TrainTypeMap = new HashMap<String, String>(){
-        {
-            put("odpt.TrainType:Local", "普通");
-            put("odpt.TrainType:Express", "急行");
-            put("odpt.TrainType:Rapid", "快速");
-            put("odpt.TrainType:LimitedExpress", "特急");
-            put("odpt.TrainType:TokyoMetro.Local", "普通");
-            put("odpt.TrainType:TokyoMetro.Rapid", "快速");
-            put("odpt.TrainType:JR-East:Local", "普通");
-            put("odpt.TrainType:JR-East:Rapid", "快速");
-            put("odpt.TrainType:JR-East:ChuoLimitedRapid", "中央特快");
-            put("odpt.TrainType:JR-East:CommuterLimitedRapid", "通勤特快");
-            put("odpt.TrainType:JR-East:CommuterRapid", "通勤快速");
+    public enum TrainType {
+        Local("Local") {
+            @Override
+            public String typeOf(Operator op) {
+                return "各駅停車";
+            }
+        },
+        Express("Express") {
+            @Override
+            public String typeOf(Operator op) {
+                return "急行";
+            }
+        },
+        SectionExpress("SectionExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "区間急行";
+            }
+        },
+        SemiExpress("SemiExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                switch (op) {
+                    case Keio:
+                        return "区間急行";
+                    default:
+                        return "準急";
+                }
+            }
+        },
+        SectionSemiExpress("SectionSemiExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "区間準急";
+            }
+        },
+        AirportExpress("AirportExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "エア急行";
+            }
+        },
+        LimitedExpress("LimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "特急";
+            }
+        },
+        SemiLimitedExpress("SemiLimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "準特急";
+            }
+        },
+        RapidExpress("RapidExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "快速急行";
+            }
+        },
+        RapidLimitedExpress("RapidLimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "快特";
+            }
+        },
+        CommuterLimitedExpress("CommuterLimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "通勤特急";
+            }
+        },
+        AccessLimitedExpress("AccessLimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "アクセス特急";
+            }
+        },
+        AirportRapidLimitedExpress("AirportRapidLimitedExpress") {
+            @Override
+            public String typeOf(Operator op) {
+                return "エア快特";
+            }
+        },
+        Rapid("Rapid") {
+            @Override
+            public String typeOf(Operator op) {
+                return "快速";
+            }
+        },
+        ChuoLimitedRapid("ChuoLimitedRapid") {
+            @Override
+            public String typeOf(Operator op) {
+                return "中央特快";
+            }
+        },
+        CommuterRapid("CommuterRapid") {
+            @Override
+            public String typeOf(Operator op) {
+                return "通勤快速";
+            }
+        },
+        CommuterLimitedRapid("CommuterLimitedRapid") {
+            @Override
+            public String typeOf(Operator op) {
+                return "通勤特快";
+            }
+        },
+        MorningWing("MorningWing") {
+            @Override
+            public String typeOf(Operator op) {
+                return "モーニング";
+            }
+        },
+        FLiner("F-Liner") {
+            @Override
+            public String typeOf(Operator op) {
+                return "Fライナー";
+            }
+        },
+        TjLiner("TJ-Liner") {
+            @Override
+            public String typeOf(Operator op) {
+                return "TJライナー";
+            }
+        },;
+
+        // constructor
+        private TrainType(String name) {
+            mTypeName = name;
         }
-    };
-    public static final QueryItem[] trainTypeItems = {
-            new QueryItem("普通", "Local"),
-            new QueryItem("快速", "Rapid"),
-            new QueryItem("急行", "Express"),
-    };
+
+        // field
+        private final String mTypeName;
+
+        // method
+        public abstract String typeOf(Operator op);
+        public static TrainType getTrainType(String type){
+            for (TrainType v : values()){
+                if (v.mTypeName.equals(type)){
+                    return v;
+                }
+            }
+            return null;
+        }
+    }
+
     //===
     //=== suffix of line
     //===
@@ -244,6 +344,7 @@ public class Common {
     public static final String SUFFIX_SEN = "線";
     public static final String SUFFIX_DIRECTION = "方面";
     public static final String SUFFIX_ROTATEDIRECTION = "回り";
+
     //===
     //=== Japanese National Holiday
     //===
@@ -344,9 +445,8 @@ public class Common {
             public Calendar dateOf(int year) {
                 return toCalendar(year, 12, 23);
             }
-        },
-        ;
-        private static final double DIFF_DAY_OF_YEAR        = 0.242194;
+        },;
+        private static final double DIFF_DAY_OF_YEAR = 0.242194;
         private final String mName;
 
         // constructor
@@ -379,7 +479,7 @@ public class Common {
             } else {
                 throw new IllegalArgumentException(year + "th year is illegal value.");
             }
-            return (int)(standard + DIFF_DAY_OF_YEAR * diff1 - (int)(diff2 / 4));
+            return (int) (standard + DIFF_DAY_OF_YEAR * diff1 - (int) (diff2 / 4));
         }
 
         // calculate AutumnalEquinoxDay of the given year
@@ -399,7 +499,7 @@ public class Common {
             } else {
                 throw new IllegalArgumentException(year + "th year is illegal value.");
             }
-            return (int)(standard + DIFF_DAY_OF_YEAR * diff1 - (int)(diff2 / 4));
+            return (int) (standard + DIFF_DAY_OF_YEAR * diff1 - (int) (diff2 / 4));
         }
 
         // return Calendar object
