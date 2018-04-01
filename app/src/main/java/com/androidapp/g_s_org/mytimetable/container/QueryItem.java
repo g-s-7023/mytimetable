@@ -55,11 +55,13 @@ public class QueryItem {
     // (expect the English name of mValue)
     public String getLastWordOfQuery() {
         if (mValueForQuery != null) {
-            String[] splitByColon = mValueForQuery.split(":", 0);
-            if (splitByColon.length > 0) {
-                String[] splitByComma = splitByColon[splitByColon.length - 1].split("\\.", 0);
-                if (splitByComma.length > 0)
-                return splitByComma[splitByComma.length - 1];
+            if (mValueForQuery.length() > 0) {
+                String[] splitByColon = mValueForQuery.split(":", 0);
+                if (splitByColon.length > 0) {
+                    String[] splitByComma = splitByColon[splitByColon.length - 1].split("\\.", 0);
+                    if (splitByComma.length > 0)
+                        return splitByComma[splitByComma.length - 1];
+                }
             }
         }
         return "";

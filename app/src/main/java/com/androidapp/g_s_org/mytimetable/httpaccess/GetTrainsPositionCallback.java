@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.concurrent.CancellationException;
 
 import static com.androidapp.g_s_org.mytimetable.common.Common.ACCESSTOKEN;
 import static com.androidapp.g_s_org.mytimetable.common.Common.KEY_CALENDAR;
@@ -36,14 +37,23 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.QUERY_TRAINTIMETA
 // callback when
 public class GetTrainsPositionCallback implements HttpGetTrafficAPI.HttpGetTrafficAPICallback {
     private static GetTrainsPositionCallback mCallback = new GetTrainsPositionCallback();
-    private Fragment mCaller;
-    private StationRecyclerViewAdapter mAdapter;
-    private int mSectionNumWhenCreated;
+    private static Fragment mCaller;
+    private static StationRecyclerViewAdapter mAdapter;
+    private static Calendar mGotDate;
+    private static int mSectionNumWhenCreated;
 
     private GetTrainsPositionCallback() {
     }
 
     public static GetTrainsPositionCallback getCallback() {
+        return mCallback;
+    }
+
+    public static GetTrainsPositionCallback newCallback(Fragment caller, StationRecyclerViewAdapter adapter, Calendar date, int section) {
+        mCaller = caller;
+        mAdapter = adapter;
+        mGotDate = date;
+        mSectionNumWhenCreated = section;
         return mCallback;
     }
 
@@ -54,6 +64,8 @@ public class GetTrainsPositionCallback implements HttpGetTrafficAPI.HttpGetTraff
     public void setAdapter(StationRecyclerViewAdapter adapter) {
         mAdapter = adapter;
     }
+
+    public void setGotDate(Calendar date){ mGotDate = date; }
 
     public void setSectionNumWhenCreated(int sectionNum) {
         mSectionNumWhenCreated = sectionNum;

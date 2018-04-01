@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 
 import com.androidapp.g_s_org.mytimetable.R;
+import com.androidapp.g_s_org.mytimetable.common.Common;
 import com.androidapp.g_s_org.mytimetable.container.StationItem;
 import com.androidapp.g_s_org.mytimetable.container.TrainItem;
 
@@ -17,6 +18,7 @@ import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_DIRECTION;
 import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_LINE;
 import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_ROTATEDIRECTION;
 import static com.androidapp.g_s_org.mytimetable.common.Common.SUFFIX_SEN;
+import static com.androidapp.g_s_org.mytimetable.common.Common.Operator;
 
 
 public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecyclerViewAdapter.ViewHolder> {
@@ -94,10 +96,11 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
         }
         // 1st train
         TrainItem train = station.getTrainItem(0);
+        Operator operator = station.getOperator();
         String trainType = "";
         String trainDestination = "";
         if (train != null) {
-            trainType = train.getTrainTypeName();
+            trainType = train.getTrainTypeName(operator);
             holder.trainType1View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
             if (trainDestination.equals("")) {
@@ -114,7 +117,7 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
         // 2nd train
         train = station.getTrainItem(1);
         if (train != null) {
-            trainType = train.getTrainTypeName();
+            trainType = train.getTrainTypeName(operator);
             holder.trainType2View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
             if (trainDestination.equals("")) {
@@ -131,7 +134,7 @@ public class StationRecyclerViewAdapter extends RecyclerView.Adapter<StationRecy
         // 3rd train
         train = station.getTrainItem(2);
         if (train != null) {
-            trainType = train.getTrainTypeName();
+            trainType = train.getTrainTypeName(operator);
             holder.trainType3View.setText(trainType.length() < 13 ? trainType : trainType.substring(0, 12));
             trainDestination = station.searchNameOfStation(train.getDestination().getValueForQuery());
             if (trainDestination.equals("")) {
